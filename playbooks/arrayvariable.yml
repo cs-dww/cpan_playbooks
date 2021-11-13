@@ -1,0 +1,14 @@
+---
+- hosts: all
+  vars: 
+    names:
+      - Alex
+      - Bob
+      - Charlie
+
+  tasks:
+    - name: display an array variable
+      debug:
+              msg: "{{ names[1] }}"
+# names[0], 1,2 correspond to the above names list under vars.
+# names[0+1] = Bob, names[1+1] = Charlie

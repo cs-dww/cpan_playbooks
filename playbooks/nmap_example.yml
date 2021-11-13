@@ -1,0 +1,17 @@
+#nmap_example.yml
+---
+- hosts: localhost
+  tasks:
+    - name: install packages
+      apt:
+        name: nmap
+        state: latest
+
+    - name: scan the hsot using nmap
+      shell: nmap "{{ ip_var }}"
+      register: out
+
+    - debug: var=out.stdout_lines
+
+# need to include a var that is ip_var or use the command line to run:
+# ansible-playbook --extra-vars "ip_var=simplilearn.com" nmap_example.yml

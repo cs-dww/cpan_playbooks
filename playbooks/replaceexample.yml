@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  tasks:
+    - name: replace example
+      replace:
+        path: /tmp/filename.txt
+        regexp: 'hello'
+        replace: "world"

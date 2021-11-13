@@ -1,0 +1,29 @@
+---
+- name: Download Openjdk
+  hosts: group2
+  tasks:
+          - name: create tomcat user
+            user:
+              name: tomcat
+              comment: tom cat
+              uid: 3001
+              group: admin
+
+          - name: Create a directory /opt/tomcat8
+            become: yes
+            file:
+              path: /opt/tomcat8
+              state: directory
+              mode: 0755
+              owner: tomcat
+              group: admin
+
+          - name: Download Tomcat using get_url
+            become: yes
+            get_url:
+              url: http://security.ubuntu.com/ubuntu/pool/universe/o/openjdk-16/openjdk-16-jdk_16.0.1+9-1~20.04_amd64.deb
+              dest: /opt/tomcat8
+              mode: 0755
+              checksum: sha256:6720fd1d33ba5fe4495daa832f553d8841b6c14a5932f80b3bae6bbca56648e7
+              group: admin
+              owner: tomcat

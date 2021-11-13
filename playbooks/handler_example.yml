@@ -1,0 +1,32 @@
+---
+- hosts: group1
+  name: install
+  tasks:
+            - name: install apache 2 on ubuntu
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: allow https traffic
+      ufw:
+        rule: allow
+        port: http
+        proto: tcp
+      notify: 
+        - Restart Apache2
+        - Reload ufw firewall
+    - shell: cat /etc/resol.conf
+      register: command_output
+
+    - shell: echo "nameserver 10.0.250.10" >> /etc/resolv.conf
+      when: command_output.stdout.find('10.0.250.10') == -1
+
+  handlers: 
+    - name: Restart Apache2
+      service:
+        name: apache2
+        state: restarted
+    - name: Reload ufw firewall
+      ufw:
+        state: enabled
