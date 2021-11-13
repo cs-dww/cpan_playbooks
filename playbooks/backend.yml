@@ -1,0 +1,21 @@
+---
+- hosts: group2
+  name: Setup DNS Server on all nodes
+  tasks:
+    - lineinfile:
+        line: "nameserver 10.1.250.10"
+        path: /etc/resolv.conf
+      name: update entry into /etc/resolv.conf
+    - name: Create a new user
+      user:
+        group: 100
+        name: web_user
+        state: present
+        uid: 3000
+- hosts: group1
+  name: nginx
+  tasks:
+    - name: install nginx
+      apt:
+        name: nginx
+        state: present

@@ -1,0 +1,21 @@
+#apacheinstall.yml
+#playbook Example
+---
+- 
+  hosts: group1
+  become: true
+  name: "install and start apache"
+  tasks:
+    - 
+      apt:
+        name: apache2
+        state: latest
+        update_cache: true
+      name: "install apache2"
+    - 
+      name: "start the service"
+      service:
+        enabled: true
+        name: apache2
+        state: started
+
