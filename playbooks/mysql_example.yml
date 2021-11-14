@@ -28,3 +28,6 @@
     - ::1
     - localhost
 
+# notes:
+# can use the command to call the shell module at cmd line to see the service mysql state on an instance:
+# ansible -m shell -a "service mysql status" webservers
