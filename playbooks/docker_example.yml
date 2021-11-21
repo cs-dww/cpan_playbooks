@@ -1,6 +1,6 @@
 ---
 - name: Deploy Docker container
-  hosts: localhost
+  hosts: group1
   tasks: 
     - name: deploy a docker container
       docker_container:
