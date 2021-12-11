@@ -1,0 +1,24 @@
+---
+- hosts: webservers
+  become: true
+  tasks:
+    - name: "Sample Message"
+      command: echo "Testing"
+      when: ansible_facts['os_family'] == "Ubuntu"
+  tasks:
+    - name: "Testing Debian"
+      command: echo “Debian”
+      when: ansible_facts['os_family'] == "Debian"
+      #
+      #  tasks:
+      #  - name: "Testing either CentOS 6 or Debian 7 systems"
+      #    command: echo “Either CentOS6 or Debian 7”
+      #    when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "6") or
+      #          (ansible_facts['distribution'] == "Debian" and ansible_facts['distribution_major_version'] == "7")
+      #
+      #  tasks:
+      #  - name: "Testing CentOS"
+      #    command: echo “CentOS”
+      #    when:
+      #      - ansible_facts['distribution'] == "CentOS"
+      #      - ansible_facts['distribution_major_version'] == "6"
