@@ -1,0 +1,44 @@
+---
+- hosts: webserver2
+
+  tasks:
+    - name: Create db docker volume
+      docker_volume:
+        name: db
+    - name: Create wordpress volume
+      docker_volume:
+        name: wordpress
+    - name: create docker_network
+      docker_network:
+        name: wordpress_net
+    - name: wordpress container tasks
+      docker_container:
+        name: wordpress
+        image: wordpress:5.7-php7.4
+        network_mode: wordpress_net
+        state: started
+        detach: yes
+        published_ports: 8090:80
+        env:
+          WORDPRESS_DB_HOST: db:3306
+          #          WORDPRESS_DB_USER: username
+          WORDPRESS_DB_PASSWORD: password
+          #          WORDPRESS_DB_NAME: wordpress
+        volumes:
+                - wordpress:/var/www/html:ro
+
+    - name: mysql database container tasks 
+      docker_container:
+        name: db
+        image: mysql:5.7
+        network_mode: wordpress_net
+        state: started
+        detach: yes
+        env:
+          MYSQL_DATABASE: wordpress
+          MYSQL_USER: username
+          MYSQL_PASSWORD: password
+          MYSQL_RANDOM_ROOT_PASSWORD: '1'
+        volumes:
+                - db:/var/lib/mysql:rw
+

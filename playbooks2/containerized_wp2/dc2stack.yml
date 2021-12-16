@@ -1,0 +1,47 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: webserver2
+  gather_facts: no
+  vars:
+    docker_volume: db_data
+    docker_network: wordpress_net2
+    db_name: db2
+    wp_name: wordpress2
+    wp_host_port: 9991
+    wp_container_port: 80
+  tasks:
+    - name: "Create a Volume"
+      docker_volume:
+        name: "{{ docker_volume }}"
+
+    - name: "Create a network"
+      docker_network:
+        name: "{{ docker_network }}"
+
+    - name: "Launch database container"
+      docker_container:
+        name: "{{ db_name }}"
+        image: mysql:5.7
+        volumes:
+          - "{{ docker_volume }}:/var/lib/mysql:rw"
+        restart_policy: always
+        network_mode: "{{ docker_network }}"
+        env:
+          MYSQL_RANDOM_ROOT_PASSWORD: '1'
+          MYSQL_DATABASE: wordpress
+          MYSQL_USER: username
+          MYSQL_PASSWORD: password
+
+    - name: "Launch wordpress container"
+      docker_container:
+        name: "{{ wp_name }}"
+        image: wordpress:latest
+        ports:
+          - "{{ wp_host_port }}:{{ wp_container_port }}"
+        restart_policy: always
+        network_mode: "{{ docker_network }}"
+        env:
+          WORDPRESS_DB_HOST: "{{ db_name }}:3306"
+          WORDPRESS_DB_USER: username
+          WORDPRESS_DB_PASSWORD: password
+          WORDPRESS_DB_NAME: wordpress
