@@ -15,15 +15,16 @@
       docker_container:
         name: wordpress
         image: wordpress:5.7-php7.4
-        network_mode: wordpress_net
+        networks: 
+          - name: wordpress_net
         state: started
         detach: yes
-        published_ports: 8090:80
+        published_ports: 9590:80
         env:
-          WORDPRESS_DB_HOST: db:3306
-          #          WORDPRESS_DB_USER: username
+          WORDPRESS_DB_HOST: db:3060
+          WORDPRESS_DB_USER: username
           WORDPRESS_DB_PASSWORD: password
-          #          WORDPRESS_DB_NAME: wordpress
+          WORDPRESS_DB_NAME: wordpress
         volumes:
                 - wordpress:/var/www/html:ro
 
@@ -31,7 +32,8 @@
       docker_container:
         name: db
         image: mysql:5.7
-        network_mode: wordpress_net
+        networks: 
+          - name: wordpress_net
         state: started
         detach: yes
         env:
